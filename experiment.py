@@ -13,7 +13,7 @@ parser.add_argument('-i', '--input', metavar='input',
 args = parser.parse_args()
 
 data_path = args.input
-# thresh = [10_000_000, 11_000_000, _000_000, _000_000]
+# thresh = [10_000_000, 11_000_000, 5_000_000, 5_000_000]
 thresh = [600_000, 900_000, 700_000, 500_000]
 for osd_idx in range(4):
     path = os.path.join(data_path, f'osd{osd_idx}')

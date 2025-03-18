@@ -63,6 +63,7 @@ class ModelD(DNN):
 
 class IONETDenseDNN:
     def __init__(self, path, model_class: DNN = ModelA, lr=0.001, batch_size=16, shuffle=False, output=sys.stdout,
+                 threshold=2_000_000,
                  seed=42):
         self.path = path
         self.seed = seed
@@ -70,9 +71,11 @@ class IONETDenseDNN:
         self.shuffle = shuffle
         self.output = output
         self.model = None
-        self.train_dataset = IOBinClassificationDataSet(self.path, train_size=0.7, stage='train')
-        self.val_dataset = IOBinClassificationDataSet(self.path, train_size=0.7, val_size=0.15, stage='val')
-        self.test_dataset = IOBinClassificationDataSet(self.path, train_size=0.7, val_size=0.15, stage='test')
+        self.train_dataset = IOBinClassificationDataSet(self.path, train_size=0.7, stage='train', threshold=threshold)
+        self.val_dataset = IOBinClassificationDataSet(self.path, train_size=0.7, val_size=0.15, stage='val',
+                                                      threshold=threshold)
+        self.test_dataset = IOBinClassificationDataSet(self.path, train_size=0.7, val_size=0.15, stage='test',
+                                                       threshold=threshold)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model = model_class(input_size=self.train_dataset.input_size(), output_size=2).to(self.device)
         self.criterion = nn.CrossEntropyLoss()
