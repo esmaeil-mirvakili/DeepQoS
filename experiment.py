@@ -60,7 +60,7 @@ for osd_idx in range(4):
         with open(f'osd{osd_idx}_dnn_{model_class}.txt', 'w') as file:
             try:
                 print(f'DNN {model_class} for osd{osd_idx}')
-                model = IONETDenseDNN(path, model_class=model_class, output=file)
+                model = IONETDenseDNN(path, model_class=model_class, output=file, threshold=thresh[osd_idx])
                 model.train()
             except Exception as e:
                 file.write(e)
