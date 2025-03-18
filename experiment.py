@@ -13,12 +13,15 @@ parser.add_argument('-i', '--input', metavar='input',
 args = parser.parse_args()
 
 data_path = args.input
+# thresh = [10_000_000, 11_000_000, _000_000, _000_000]
+thresh = [600_000, 900_000, 700_000, 500_000]
 for osd_idx in range(4):
     path = os.path.join(data_path, f'osd{osd_idx}')
-    train_dataset = IOBinClassificationDataSet(path, stage='train')
-    test_dataset = IOBinClassificationDataSet(path, stage='test')
+    train_dataset = IOBinClassificationDataSet(path, stage='train', threshold=thresh[osd_idx])
+    test_dataset = IOBinClassificationDataSet(path, stage='test', threshold=thresh[osd_idx])
 
     try:
+        print(f'Regression for osd{osd_idx}')
         model = IONETLogisticRegression(path)
         model.train_dataset = train_dataset
         model.test_dataset = test_dataset
@@ -30,6 +33,7 @@ for osd_idx in range(4):
         file.write(report)
 
     try:
+        print(f'Rand Forest for osd{osd_idx}')
         model = IONETRandomForest(path)
         model.train_dataset = train_dataset
         model.test_dataset = test_dataset
@@ -41,6 +45,7 @@ for osd_idx in range(4):
         file.write(report)
 
     try:
+        print(f'Dec Tree for osd{osd_idx}')
         model = IONETDecisionTree(path)
         model.train_dataset = train_dataset
         model.test_dataset = test_dataset
@@ -54,6 +59,7 @@ for osd_idx in range(4):
     for model_class in [ModelA, ModelB, ModelC, ModelD]:
         with open(f'osd{osd_idx}_dnn_{model_class}.txt', 'w') as file:
             try:
+                print(f'DNN {model_class} for osd{osd_idx}')
                 model = IONETDenseDNN(path, model_class=model_class, output=file)
                 model.train()
             except Exception as e:
