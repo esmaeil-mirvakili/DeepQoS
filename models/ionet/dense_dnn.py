@@ -81,7 +81,7 @@ class IONETDenseDNN:
         self.criterion = nn.CrossEntropyLoss()
         self.optimizer = optim.Adam(self.model.parameters(), lr=lr)
 
-    def train(self, epochs=1000):
+    def train(self, epochs=100):
         train_loader = DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=self.shuffle)
         val_loader = DataLoader(self.val_dataset, batch_size=self.batch_size, shuffle=self.shuffle)
         test_loader = DataLoader(self.test_dataset, batch_size=self.batch_size, shuffle=self.shuffle)
